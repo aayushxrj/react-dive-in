@@ -1,27 +1,40 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Item from "./Item"
 import Button from "./Button";
-
+import axios from "axios";
 
 function List (){
-    const [items, setItems] = useState([
-        { key: 1, data: "Read SpringBoot", done: false },
-        { key: 2, data: "Complete assignments", done: false },
-        { key: 3, data: "Prepare breakfast", done: false },
-        { key: 4, data: "Sleep for 2 hours", done: false },
-        { key: 5, data: "Take a shower", done: false }
-    ]);
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
+    const apiURL = "https://mocki.io/v1/5af01e4d-ed9f-4ed5-871f-2c7477860e25";
+
+    useEffect(() => {
+        axios
+        .get(apiURL)
+        .then((response) => {
+            setItems(response.data);
+            setLoading(false);
+        })
+        .catch((err) => {
+            setError("Failed to fetch data");
+            setLoading(false);
+        });
+    }, []);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
 
     const handleToggle = (key) => {
         setItems(items => items.map(item =>
-            item.key === key ? { ...item, done: !item.done } : item
+            item.id === key ? { ...item, completed: !item.completed } : item
         ));
     };
 
     const removeCompleted = () => {
-        setItems(items => items.filter(item => !item.done));
+        setItems(items => items.filter(item => !item.completed));
     };
 
     return (
@@ -31,10 +44,10 @@ function List (){
                 (
                     items.map((item) => (
                         <Item
-                            key={item.key}
-                            data={item.data}
-                            done={item.done}
-                            onToggle={() => handleToggle(item.key)}
+                            key={item.id}
+                            data={item.title}
+                            done={item.completed}
+                            onToggle={() => handleToggle(item.id)}
                         />
                     ))
                 )}
@@ -43,7 +56,7 @@ function List (){
                 <Button
                     label="Remove Completed"
                     onClick={removeCompleted}
-                    disabled={!items.some(item => item.done)}
+                    disabled={!items.some(item => item.completed)}
                 />
             )}
         </div>
