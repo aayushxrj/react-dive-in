@@ -1,5 +1,5 @@
-function Button({ label, onClick }) {
-    return <button className="btn" onClick={onClick}>{label}</button>
+function Button({ label, onClick, disabled }) {
+    return <button className="btn" onClick={onClick} disabled={disabled}>{label}</button>
 }
 
 export default Button   

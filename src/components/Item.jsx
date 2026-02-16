@@ -1,12 +1,9 @@
-import { useState } from "react"
 
-function Item({ data }) {
-    const [done, setDone] = useState(false);
-
+function Item({ data, done, onToggle }) {
     return (
         <li
             className="item"
-            onClick={() => setDone((d) => !d)}
+            onClick={onToggle}
             style={{
                 textDecoration: done ? "line-through" : "none",
                 cursor: "pointer"
