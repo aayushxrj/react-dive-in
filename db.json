@@ -1,0 +1,34 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "Read SpringBoot",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "title": "Complete assignments",
+      "completed": true
+    },
+    {
+      "id": 3,
+      "title": "Prepare breakfast",
+      "completed": false
+    },
+    {
+      "id": 4,
+      "title": "Sleep for 2 hours",
+      "completed": false
+    },
+    {
+      "id": 5,
+      "title": "Take a shower",
+      "completed": false
+    },
+    {
+      "id": 6,
+      "title": "heloo",
+      "completed": false
+    }
+  ]
+}

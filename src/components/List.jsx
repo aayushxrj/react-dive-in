@@ -8,8 +8,9 @@ function List (){
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [newTodo, setNewTodo] = useState("");
 
-    const apiURL = "https://mocki.io/v1/5af01e4d-ed9f-4ed5-871f-2c7477860e25";
+    const apiURL = "http://localhost:3001/todos";
 
     useEffect(() => {
         axios
@@ -37,8 +38,38 @@ function List (){
         setItems(items => items.filter(item => !item.completed));
     };
 
+    const handleAddTodo = (e) => {
+        e.preventDefault();
+        if (!newTodo.trim()) return;
+        
+        const newItem = {
+            id: items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1,
+            title: newTodo.trim(),
+            completed: false
+        };
+        
+        axios.post(apiURL, newItem)
+            .then((response) => {
+                setItems([...items, response.data]);
+                setNewTodo("");
+            })
+            .catch((err) => {
+                console.error("Failed to add todo:", err);
+            });
+    };
+
     return (
         <div className="list">
+            <form onSubmit={handleAddTodo} className="add-todo-form">
+                <input
+                    type="text"
+                    value={newTodo}
+                    onChange={(e) => setNewTodo(e.target.value)}
+                    placeholder="Enter a new todo..."
+                    className="todo-input"
+                />
+                <Button label="Add Todo" onClick={handleAddTodo} disabled={!newTodo.trim()} />
+            </form>
             <ol>
                 {items.length === 0 ? (<i>Nothing to do buddy. Sleep!</i>) :
                 (
